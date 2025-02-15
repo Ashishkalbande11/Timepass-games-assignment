@@ -133,87 +133,79 @@ const MultiStepForm = () => {
         <main className=" rounded-xl bg-white my-[-60px] md:my-0 p-4  lg:mx-16 md:w-[530px] md:relative flex flex-col justify-between w-[90%] m-auto max-w-md ">
           {/* Step 1 */}
           {step === 1 && (
-            <section className="one ">
-              <h1 className="text-2xl font-bold mb-2">Personal info</h1>
-              <p className="text-zinc-500 text-sm">
-                Please provide your name, email address, and phone number.
-              </p>
-              <form className="mt-6 text-marineBlue">
-                <div className="mb-4">
-                  <label
-                    htmlFor="name"
-                    className="block text-sm font-semibold mb-1"
-                  >
-                    Name
-                  </label>
-                  {errors.name && (
-                    <p className="text-red-500 text-xs ml-auto font-semibold">
-                      {errors.name}
-                    </p>
-                  )}
-                  <input
-                    className={`block mb-2 border font-semibold p-2 rounded-lg w-full ${
-                      errors.name ? "border-red-500" : "border-zinc-600"
-                    }`}
-                    type="text"
-                    id="name"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleInputChange}
-                    placeholder="e.g. Stephen King"
-                  />
-                </div>
-                <div className="mb-4">
-                  <label
-                    htmlFor="mail"
-                    className="block text-sm font-semibold mb-1"
-                  >
-                    Email Address
-                  </label>
-                  {errors.email && (
-                    <p className="text-red-500 text-xs ml-auto font-semibold">
-                      {errors.email}
-                    </p>
-                  )}
-                  <input
-                    className={`block mb-2 border font-semibold p-2 rounded-lg w-full ${
-                      errors.email ? "border-red-500" : "border-zinc-600"
-                    }`}
-                    type="email"
-                    id="mail"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    placeholder="e.g. stephenking@lorem.com"
-                  />
-                </div>
-                <div className="mb-4">
-                  <label
-                    htmlFor="phone"
-                    className="block text-sm font-semibold mb-1"
-                  >
-                    Phone Number
-                  </label>
-                  {errors.phone && (
-                    <p className="text-red-500 text-xs ml-auto font-semibold">
-                      {errors.phone}
-                    </p>
-                  )}
-                  <input
-                    className={`block mb-2 border font-semibold p-2 rounded-lg w-full ${
-                      errors.phone ? "border-red-500" : "border-zinc-600"
-                    }`}
-                    type="text"
-                    id="phone"
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleInputChange}
-                    placeholder="e.g. +1 234 567 890"
-                  />
-                </div>
-              </form>
-            </section>
-          )}
+  <section className="one">
+    <h1 className="text-2xl font-bold mb-2">Personal info</h1>
+    <p className="text-zinc-500 text-sm">
+      Please provide your name, email address, and phone number.
+    </p>
+    <form className="mt-6 text-marineBlue">
+      <div className="mb-4 flex items-center justify-between">
+        <label htmlFor="name" className="block text-sm font-semibold ">
+          Name
+        </label>
+        {errors.name && (
+          <p className="text-red-500 text-xs ml-2 font-semibold">
+            {errors.name}
+          </p>
+        )}
+      </div>
+      <input
+        className={`block mb-4 mt-[-15px] border font-semibold p-2 rounded-lg w-full ${
+          errors.name ? "border-red-500" : "border-zinc-600"
+        }`}
+        type="text"
+        id="name"
+        name="name"
+        value={formData.name}
+        onChange={handleInputChange}
+        placeholder="e.g. Stephen King"
+      />
+      <div className="mb-4 flex items-center justify-between">
+        <label htmlFor="mail" className="block text-sm font-semibold mb-1">
+          Email Address
+        </label>
+        {errors.email && (
+          <p className="text-red-500 text-xs ml-2 font-semibold">
+            {errors.email}
+          </p>
+        )}
+      </div>
+      <input
+        className={`block mb-4 mt-[-15px]  border font-semibold p-2 rounded-lg w-full ${
+          errors.email ? "border-red-500" : "border-zinc-600"
+        }`}
+        type="email"
+        id="mail"
+        name="email"
+        value={formData.email}
+        onChange={handleInputChange}
+        placeholder="e.g. stephenking@lorem.com"
+      />
+      <div className="mb-4 flex items-center justify-between">
+        <label htmlFor="phone" className="block text-sm font-semibold mb-1">
+          Phone Number
+        </label>
+        {errors.phone && (
+          <p className="text-red-500 text-xs ml-2 font-semibold">
+            {errors.phone}
+          </p>
+        )}
+      </div>
+      <input
+        className={`block mb-4 mt-[-15px]  border font-semibold p-2 rounded-lg w-full ${
+          errors.phone ? "border-red-500" : "border-zinc-600"
+        }`}
+        type="text"
+        id="phone"
+        name="phone"
+        value={formData.phone}
+        onChange={handleInputChange}
+        placeholder="e.g. +1 234 567 890"
+      />
+    </form>
+  </section>
+)}
+
 
           {/* Step 2 */}
           {step === 2 && (
