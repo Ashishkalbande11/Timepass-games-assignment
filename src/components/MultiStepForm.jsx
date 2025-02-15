@@ -327,10 +327,16 @@ const MultiStepForm = () => {
                   <span
                     className={`block relative w-6 aspect-square rounded-md border-2 ${
                       formData.addOns.online
-                        ? "bg-blue-500 border-blue-500 "
+                        ? "bg-blue-500 border-blue-500"
                         : "bg-white border-zinc-300"
                     }`}
-                  ></span>
+                  >
+                    <img
+                      src={checkIcon}
+                      alt="check"
+                      className="absolute top-0 left-0 right-0 bottom-0 m-auto"
+                    />
+                  </span>
 
                   <div className="flex justify-between items-center grow">
                     <div>
@@ -362,19 +368,18 @@ const MultiStepForm = () => {
                     onChange={handleCheckboxChange}
                   />
                   <span
-                    className={`block relative w-5 aspect-square rounded-md border-2 ${
+                    className={`block relative w-6 aspect-square rounded-md border-2 ${
                       formData.addOns.storage
                         ? "bg-blue-500 border-blue-500"
-                        : "bg-white border-zinc-300 "
+                        : "bg-white border-zinc-300"
                     }`}
-                    style={{
-                      backgroundImage: formData.addOns.storage
-                        ? `url(${checkIcon})`
-                        : "none",
-                      backgroundSize: "cover",
-                      backgroundPosition: "center",
-                    }}
-                  ></span>
+                  >
+                    <img
+                      src={checkIcon}
+                      alt="check"
+                      className="absolute top-0 left-0 right-0 bottom-0 m-auto"
+                    />
+                  </span>
 
                   <div className="flex justify-between items-center grow">
                     <div>
@@ -405,20 +410,19 @@ const MultiStepForm = () => {
                     checked={formData.addOns.profile}
                     onChange={handleCheckboxChange}
                   />
-                  <span
-                    className={`block relative w-5 aspect-square rounded-md border-2 ${
+                 <span
+                    className={`block relative w-6 aspect-square rounded-md border-2 ${
                       formData.addOns.profile
                         ? "bg-blue-500 border-blue-500"
-                        : "bg-white border-zinc-300 "
+                        : "bg-white border-zinc-300"
                     }`}
-                    style={{
-                      backgroundImage: formData.addOns.profile
-                        ? `url(${checkIcon})`
-                        : "none",
-                      backgroundSize: "cover",
-                      backgroundPosition: "center",
-                    }}
-                  ></span>
+                  >
+                    <img
+                      src={checkIcon}
+                      alt="check"
+                      className="absolute top-0 left-0 right-0 bottom-0 m-auto"
+                    />
+                  </span>
 
                   <div className="flex justify-between items-center grow">
                     <div>
@@ -456,7 +460,10 @@ const MultiStepForm = () => {
                       </span>
                       )
                     </h3>
-                    <span className="change-button text-zinc-500 underline cursor-pointer " onClick={handleGoBack}>
+                    <span
+                      className="change-button text-zinc-500 underline cursor-pointer "
+                      onClick={handleGoBack}
+                    >
                       Change
                     </span>
                   </div>
@@ -512,51 +519,57 @@ const MultiStepForm = () => {
           )}
 
           {/* Step 5: Thank You */}
-          {step === 5 && (<section className=" flex mx-auto text-center my-12 md:my-0 flex-col gap-5 justify-center items-center h-full">
-            <img src={thankyou} alt="thankyou" />
-            <h2 className="text-marineBlue text-3xl font-bold">Thank you!</h2>
-            <p className="text-zinc-500">
-              Thanks for confirming your subscription! We hope you have fun
-              using our platform. If you ever need support, please feel free to
-              email us at support@loremgaming.com.
-            </p>
-          </section>)}
+          {step === 5 && (
+            <section className=" flex mx-auto text-center my-12 md:my-0 flex-col gap-5 justify-center items-center h-full">
+              <img src={thankyou} alt="thankyou" />
+              <h2 className="text-marineBlue text-3xl font-bold">Thank you!</h2>
+              <p className="text-zinc-500">
+                Thanks for confirming your subscription! We hope you have fun
+                using our platform. If you ever need support, please feel free
+                to email us at support@loremgaming.com.
+              </p>
+            </section>
+          )}
 
           {/* Buttons */}
-          {step !== 5 && (<div className={`hidden  md:flex  md:flex-row mb-5 justify-between items-center `}>
+          {step !== 5 && (
+            <div
+              className={`hidden  md:flex  md:flex-row mb-5 justify-between items-center `}
+            >
+              {step > 1 && (
+                <span
+                  className="go-back font-semibold px-6 py-2 cursor-pointer text-zinc-500 hover:text-[#03295A] md:absolute md:left-[20px] md:bottom-[20px] mt-4 md:mt-0"
+                  onClick={handleGoBack}
+                >
+                  Go Back
+                </span>
+              )}
+              <button
+                onClick={handleNextStep}
+                className={`px-6 py-2 mx-2 md:mx-0 text-white font-semibold rounded-md transition bg-[#03295A] hover:bg-[#184A89] cursor-pointer md:absolute md:right-[20px] md:bottom-[20px] mt-4 md:mt-0`}
+              >
+                {step === 4 ? "Confirm" : "Next Step"}
+              </button>
+            </div>
+          )}
+        </main>
+        {step !== 5 && (
+          <div className="flex md:hidden flex-row mt-[60px] mb-5 justify-between items-center w-[90%] mx-auto">
             {step > 1 && (
               <span
-                className="go-back font-semibold px-6 py-2 cursor-pointer text-zinc-500 hover:text-[#03295A] md:absolute md:left-[20px] md:bottom-[20px] mt-4 md:mt-0"
+                className="go-back font-semibold px-6 py-2 cursor-pointer text-zinc-500 hover:text-[#03295A] mt-8"
                 onClick={handleGoBack}
               >
                 Go Back
               </span>
             )}
             <button
-              onClick={handleNextStep}
-              className={`px-6 py-2 mx-2 md:mx-0 text-white font-semibold rounded-md transition bg-[#03295A] hover:bg-[#184A89] cursor-pointer md:absolute md:right-[20px] md:bottom-[20px] mt-4 md:mt-0`}
+              onClick={step === 5 ? handleConfirm : handleNextStep}
+              className="px-6 py-2 mx-2 md:mx-0 text-white font-semibold rounded-md transition bg-[#03295A] hover:bg-[#184A89] cursor-pointer mt-8 ml-auto"
             >
               {step === 4 ? "Confirm" : "Next Step"}
             </button>
-          </div>)}
-        </main>
-        {step !== 5 && (
-          <div className="flex md:hidden flex-row mt-[60px] mb-5 justify-between items-center w-[90%] mx-auto">
-          {step > 1 && (
-            <span
-              className="go-back font-semibold px-6 py-2 cursor-pointer text-zinc-500 hover:text-[#03295A] mt-8"
-              onClick={handleGoBack}
-            >
-              Go Back
-            </span>
-          )}
-          <button
-            onClick={step === 5 ? handleConfirm : handleNextStep}
-            className="px-6 py-2 mx-2 md:mx-0 text-white font-semibold rounded-md transition bg-[#03295A] hover:bg-[#184A89] cursor-pointer mt-8 ml-auto"
-          >
-            {step === 4 ? "Confirm" : "Next Step"}
-          </button>
-        </div>
+          </div>
         )}
       </div>
     </div>
