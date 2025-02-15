@@ -587,10 +587,13 @@ const MultiStepForm = () => {
                   Total (per{" "}
                   {formData.billingCycle==="monthly" ?<span className="month-year">month</span>:<span className="month-year">year</span>})
                 </h3>
-                <span className="text-blue-700 font-bold text-xl">
+                {formData.billingCycle === "monthly" ? (<span className="text-blue-700 font-bold text-xl">
                   ${calculateTotal()}
                   <span className="mo-yr">/mo</span>
-                </span>
+                </span>):(<span className="text-blue-700 font-bold text-xl">
+                  ${calculateTotal()}
+                  <span className="mo-yr">/yr</span>
+                </span>)}
               </div>
             </section>
           )}
