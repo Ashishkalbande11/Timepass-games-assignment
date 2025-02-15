@@ -2,6 +2,8 @@ import { useState } from "react";
 import Arcade from "../assets/icon-arcade.svg";
 import Advance from "../assets/icon-advanced.svg";
 import Pro from "../assets/icon-pro.svg";
+import checkIcon from "../assets/icon-checkmark.svg";
+import thankyou from "../assets/icon-thank-you.svg";
 
 const MultiStepForm = () => {
   const [step, setStep] = useState(1);
@@ -22,6 +24,7 @@ const MultiStepForm = () => {
     email: "",
     phone: "",
   });
+  // const [step, setStep] = useState(1);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -59,15 +62,35 @@ const MultiStepForm = () => {
   };
 
   const handleNextStep = () => {
-    console.log("Form Data:", formData); // Log all form data
-    if (step === 4) return; // Prevent going beyond step 4
+    console.log("Form Data on Next Step:", formData); // Log the form data on each step
+    if (step === 5) return; // Prevent going beyond step 5
     if (!validate()) return; // Only move to next step if validation passes
     setStep((prevStep) => prevStep + 1);
   };
 
   const handleGoBack = () => {
+    console.log("Form Data on Go Back:", formData); // Log the form data when going back
     if (step === 1) return; // Prevent going back below step 1
     setStep((prevStep) => prevStep - 1);
+  };
+
+  const handleConfirm = () => {
+    console.log("Form Data on Confirm:", formData); // Log the form data when confirming the subscription
+    setStep(5); // This would go to the thank you page or final step
+  };
+
+  const calculateTotal = () => {
+    let total = 0;
+    if (formData.plan === "Arcade") total = 9; // Example: Arcade plan price
+    if (formData.plan === "Advanced") total = 12; // Example: Advanced plan price
+    if (formData.plan === "Pro") total = 15; // Example: Pro plan price
+
+    // Add price for selected add-ons
+    if (formData.addOns.online) total += 1;
+    if (formData.addOns.storage) total += 2;
+    if (formData.addOns.profile) total += 2;
+
+    return total;
   };
 
   return (
@@ -278,9 +301,229 @@ const MultiStepForm = () => {
               </div>
             </section>
           )}
+          {step === 3 && (
+            <section className="three mx-auto">
+              <h1 className="text-3xl md:text-3xl text-marineBlue font-bold mb-3">
+                Pick add-ons
+              </h1>
+              <p className="text-zinc-500">
+                Add-ons help enhance your gaming experience.
+              </p>
+
+              <div className="holder mt-3 md:mt-9">
+                {/* Online Service Add-On */}
+                <label
+                  htmlFor="online"
+                  className={`px-3 md:px-5 py-3 mb-3 border-2 hover:border-[#6259FF] border-zinc-400 cursor-pointer rounded-xl flex items-center gap-3 md:gap-5 }`}
+                >
+                  <input
+                    className="peer appearance-none absolute"
+                    type="checkbox"
+                    id="online"
+                    name="online"
+                    checked={formData.addOns.online}
+                    onChange={handleCheckboxChange}
+                  />
+                  <span
+                    className={`block relative w-6 aspect-square rounded-md border-2 ${
+                      formData.addOns.online
+                        ? "bg-blue-500 border-blue-500 "
+                        : "bg-white border-zinc-300"
+                    }`}
+                  ></span>
+
+                  <div className="flex justify-between items-center grow">
+                    <div>
+                      <h3 className="text-zinc-700 font-bold">
+                        Online service
+                      </h3>
+                      <p className="text-zinc-500 text-sm md:text-base">
+                        Access to multiplayer games
+                      </p>
+                    </div>
+                    <span className="text-[#6259FF] tracking-tighter text-xs md:text-base">
+                      +$<span className="online price">1</span>/{" "}
+                      <span className="mo-yr">mo</span>
+                    </span>
+                  </div>
+                </label>
+
+                {/* Larger Storage Add-On */}
+                <label
+                  htmlFor="storage"
+                  className={`px-3 md:px-5 py-3 mb-3 border-2 hover:border-[#6259FF] border-zinc-400 cursor-pointer rounded-xl flex items-center gap-3 md:gap-5 `}
+                >
+                  <input
+                    className="peer appearance-none absolute"
+                    type="checkbox"
+                    id="storage"
+                    name="storage"
+                    checked={formData.addOns.storage}
+                    onChange={handleCheckboxChange}
+                  />
+                  <span
+                    className={`block relative w-5 aspect-square rounded-md border-2 ${
+                      formData.addOns.storage
+                        ? "bg-blue-500 border-blue-500"
+                        : "bg-white border-zinc-300 "
+                    }`}
+                    style={{
+                      backgroundImage: formData.addOns.storage
+                        ? `url(${checkIcon})`
+                        : "none",
+                      backgroundSize: "cover",
+                      backgroundPosition: "center",
+                    }}
+                  ></span>
+
+                  <div className="flex justify-between items-center grow">
+                    <div>
+                      <h3 className="text-zinc-700 font-bold">
+                        Larger storage
+                      </h3>
+                      <p className="text-zinc-500 text-sm md:text-base">
+                        Extra 1TB of cloud save
+                      </p>
+                    </div>
+                    <span className="text-[#6259FF] tracking-tighter text-xs md:text-base">
+                      +$<span className="storage price">2</span>/{" "}
+                      <span className="mo-yr">mo</span>
+                    </span>
+                  </div>
+                </label>
+
+                {/* Customizable Profile Add-On */}
+                <label
+                  htmlFor="profile"
+                  className={`px-3 md:px-5 py-3 border-2 hover:border-[#6259FF] border-zinc-400 cursor-pointer rounded-xl flex items-center gap-3 md:gap-5 `}
+                >
+                  <input
+                    className="peer appearance-none absolute"
+                    type="checkbox"
+                    id="profile"
+                    name="profile"
+                    checked={formData.addOns.profile}
+                    onChange={handleCheckboxChange}
+                  />
+                  <span
+                    className={`block relative w-5 aspect-square rounded-md border-2 ${
+                      formData.addOns.profile
+                        ? "bg-blue-500 border-blue-500"
+                        : "bg-white border-zinc-300 "
+                    }`}
+                    style={{
+                      backgroundImage: formData.addOns.profile
+                        ? `url(${checkIcon})`
+                        : "none",
+                      backgroundSize: "cover",
+                      backgroundPosition: "center",
+                    }}
+                  ></span>
+
+                  <div className="flex justify-between items-center grow">
+                    <div>
+                      <h3 className="text-zinc-700 font-bold">
+                        Customizable Profile
+                      </h3>
+                      <p className="text-zinc-500 text-sm md:text-base">
+                        Custom theme on your profile
+                      </p>
+                    </div>
+                    <span className="text-[#6259FF] tracking-tighter text-xs md:text-base">
+                      +$<span className="profile price">2</span>/{" "}
+                      <span className="mo-yr">mo</span>
+                    </span>
+                  </div>
+                </label>
+              </div>
+            </section>
+          )}
+          {step === 4 && (
+            <section className="four mx-auto ">
+              <h1 className="text-3xl md:text-3xl text-[#03295A] font-bold mb-3">
+                Finishing up
+              </h1>
+              <p className="text-zinc-500">
+                Double-check everything looks OK before confirming.
+              </p>
+              <div className="result bg-alabaster rounded-lg p-5 flex flex-col gap-5 mt-3 md:mt-2">
+                <div className="flex justify-between items-center border-b border-lightGray pb-5">
+                  <div>
+                    <h3 className="text-lg md:text-xl font-bold text-[#03295A]">
+                      <span className="plan-name">{formData.plan}</span> (
+                      <span className="monthly-yearly">
+                        {formData.billingCycle}
+                      </span>
+                      )
+                    </h3>
+                    <span className="change-button text-zinc-500 underline cursor-pointer " onClick={handleGoBack}>
+                      Change
+                    </span>
+                  </div>
+                  <span className="text-[#03295A] font-bold">
+                    $
+                    {formData.plan === "Arcade"
+                      ? 9
+                      : formData.plan === "Advanced"
+                      ? 12
+                      : 15}
+                    /<span className="mo-yr">mo</span>
+                  </span>
+                </div>
+
+                {/* Add-ons */}
+                {formData.addOns.online && (
+                  <div className="summary-add-on flex justify-between">
+                    <h3 className="text-zinc-500">Online service</h3>
+                    <span className="text-zinc-500 font-semibold text-sm">
+                      +$1/mo
+                    </span>
+                  </div>
+                )}
+                {formData.addOns.storage && (
+                  <div className="summary-add-on flex justify-between">
+                    <h3 className="text-zinc-500">Larger storage</h3>
+                    <span className="text-zinc-500 font-semibold text-sm">
+                      +$2/mo
+                    </span>
+                  </div>
+                )}
+                {formData.addOns.profile && (
+                  <div className="summary-add-on flex justify-between">
+                    <h3 className="text-zinc-500">Customizable profile</h3>
+                    <span className="text-zinc-500 font-semibold text-sm">
+                      +$2/mo
+                    </span>
+                  </div>
+                )}
+              </div>
+
+              <div className="total flex justify-between p-5">
+                <h3 className="text-zinc-500">
+                  Total (per{" "}
+                  <span className="month-year">{formData.billingCycle}</span>)
+                </h3>
+                <span className="text-blue-700 font-bold text-xl">
+                  ${calculateTotal()}
+                  <span className="mo-yr">/mo</span>
+                </span>
+              </div>
+            </section>
+          )}
+
+          {/* Step 5: Thank You */}
+          {step === 5 && (<section className=" flex mx-auto text-center my-12 md:my-0 flex-col gap-5 justify-center items-center h-full">
+            <img src={thankyou} alt="thankyou" />
+            <h2 className="text-marineBlue text-3xl font-bold">Thank you!</h2>
+            <p className="text-zinc-500">
+              Thanks for confirming your subscription! We hope you have fun
+              using our platform. If you ever need support, please feel free to
+              email us at support@loremgaming.com.
+            </p>
+          </section>)}
 
           {/* Buttons */}
-          <div className=" hidden  md:flex  md:flex-row mb-5 justify-between items-center">
+          {step !== 5 && (<div className={`hidden  md:flex  md:flex-row mb-5 justify-between items-center `}>
             {step > 1 && (
               <span
                 className="go-back font-semibold px-6 py-2 cursor-pointer text-zinc-500 hover:text-[#03295A] md:absolute md:left-[20px] md:bottom-[20px] mt-4 md:mt-0"
@@ -295,24 +538,26 @@ const MultiStepForm = () => {
             >
               {step === 4 ? "Confirm" : "Next Step"}
             </button>
-          </div>
+          </div>)}
         </main>
-        <div className="flex md:hidden flex-row mt-[60px] mb-5 justify-between items-center w-[90%] mx-auto">
-  {step > 1 && (
-    <span
-      className="go-back font-semibold px-6 py-2 cursor-pointer text-zinc-500 hover:text-[#03295A] mt-8"
-      onClick={handleGoBack}
-    >
-      Go Back
-    </span>
-  )}
-  <button
-    onClick={handleNextStep}
-    className="px-6 py-2 mx-2 md:mx-0 text-white font-semibold rounded-md transition bg-[#03295A] hover:bg-[#184A89] cursor-pointer mt-8 ml-auto"
-  >
-    {step === 4 ? "Confirm" : "Next Step"}
-  </button>
-</div>
+        {step !== 5 && (
+          <div className="flex md:hidden flex-row mt-[60px] mb-5 justify-between items-center w-[90%] mx-auto">
+          {step > 1 && (
+            <span
+              className="go-back font-semibold px-6 py-2 cursor-pointer text-zinc-500 hover:text-[#03295A] mt-8"
+              onClick={handleGoBack}
+            >
+              Go Back
+            </span>
+          )}
+          <button
+            onClick={step === 5 ? handleConfirm : handleNextStep}
+            className="px-6 py-2 mx-2 md:mx-0 text-white font-semibold rounded-md transition bg-[#03295A] hover:bg-[#184A89] cursor-pointer mt-8 ml-auto"
+          >
+            {step === 4 ? "Confirm" : "Next Step"}
+          </button>
+        </div>
+        )}
       </div>
     </div>
   );
