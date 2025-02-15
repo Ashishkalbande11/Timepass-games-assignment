@@ -18,6 +18,7 @@ const MultiStepForm = () => {
       profile: false,
     },
     billingCycle: "monthly", // Default to monthly
+    price : 0
   });
   const [errors, setErrors] = useState({
     name: "",
@@ -28,12 +29,23 @@ const MultiStepForm = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
-
+  
+    // For phone number field, filter out alphabetic characters
+    if (name === "phone") {
+      // Replace anything that's not a number, space, plus, or dash
+      const validValue = value.replace(/[^0-9+\s-]/g, '');
+      setFormData({
+        ...formData,
+        [name]: validValue,
+      });
+    } else {
+      // For other fields, just update normally
+      setFormData({
+        ...formData,
+        [name]: value,
+      });
+    }
+  }
   const handleCheckboxChange = (e) => {
     const { name, checked } = e.target;
     setFormData({
@@ -54,14 +66,37 @@ const MultiStepForm = () => {
 
   const validate = () => {
     let tempErrors = {};
-    if (!formData.name) tempErrors.name = "This field is required";
-    if (!formData.email) tempErrors.email = "This field is required";
-    if (!formData.phone) tempErrors.phone = "This field is required";
+  
+    // Name validation: at least 3 characters long
+    if (!formData.name) {
+      tempErrors.name = "This field is required";
+    } else if (formData.name.length < 3) {
+      tempErrors.name = "Name must be at least 3 characters long";
+    }
+  
+    // Email validation: proper email format
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!formData.email) {
+      tempErrors.email = "This field is required";
+    } else if (!emailRegex.test(formData.email)) {
+      tempErrors.email = "Enter a valid email address";
+    }
+  
+   // Phone validation: required and correct format (supports various formats)
+   if (!formData.phone ) {
+    tempErrors.phone = "This field is required";
+  }
+  if(formData.phone.length < 9 || formData.phone.length > 13){
+    tempErrors.phone = "Enter valid phone number"
+  }
+  
     setErrors(tempErrors);
     return Object.keys(tempErrors).length === 0;
   };
+  
 
   const handleNextStep = () => {
+    formData.price = calculateTotal();
     console.log("Form Data on Next Step:", formData); // Log the form data on each step
     if (step === 5) return; // Prevent going beyond step 5
     if (!validate()) return; // Only move to next step if validation passes
@@ -81,6 +116,8 @@ const MultiStepForm = () => {
 
   const calculateTotal = () => {
     let total = 0;
+
+   if(formData.billingCycle === "monthly"){
     if (formData.plan === "Arcade") total = 9; // Example: Arcade plan price
     if (formData.plan === "Advanced") total = 12; // Example: Advanced plan price
     if (formData.plan === "Pro") total = 15; // Example: Pro plan price
@@ -89,6 +126,16 @@ const MultiStepForm = () => {
     if (formData.addOns.online) total += 1;
     if (formData.addOns.storage) total += 2;
     if (formData.addOns.profile) total += 2;
+   }else{
+    if (formData.plan === "Arcade") total = 90; // Example: Arcade plan price
+    if (formData.plan === "Advanced") total = 120; // Example: Advanced plan price
+    if (formData.plan === "Pro") total = 150; // Example: Pro plan price
+
+    // Add price for selected add-ons
+    if (formData.addOns.online) total += 10;
+    if (formData.addOns.storage) total += 20;
+    if (formData.addOns.profile) total += 20;
+   }
 
     return total;
   };
@@ -195,12 +242,13 @@ const MultiStepForm = () => {
         className={`block mb-4 mt-[-15px]  border font-semibold p-2 rounded-lg w-full ${
           errors.phone ? "border-red-500" : "border-zinc-600"
         }`}
-        type="text"
+        type="tel"
         id="phone"
         name="phone"
         value={formData.phone}
         onChange={handleInputChange}
         placeholder="e.g. +1 234 567 890"
+        inputMode="tel"
       />
     </form>
   </section>
@@ -339,10 +387,15 @@ const MultiStepForm = () => {
                         Access to multiplayer games
                       </p>
                     </div>
-                    <span className="text-[#6259FF] tracking-tighter text-xs md:text-base">
+                    {formData.billingCycle === "monthly" ? (
+                      <span className="text-[#6259FF] tracking-tighter text-xs md:text-base">
                       +$<span className="online price">1</span>/{" "}
                       <span className="mo-yr">mo</span>
                     </span>
+                    ):(<span className="text-[#6259FF] tracking-tighter text-xs md:text-base">
+                      +$<span className="online price">10</span>/{" "}
+                      <span className="mo-yr">yr</span>
+                    </span>)}
                   </div>
                 </label>
 
@@ -382,10 +435,15 @@ const MultiStepForm = () => {
                         Extra 1TB of cloud save
                       </p>
                     </div>
-                    <span className="text-[#6259FF] tracking-tighter text-xs md:text-base">
-                      +$<span className="storage price">2</span>/{" "}
+                    {formData.billingCycle === "monthly" ? (
+                      <span className="text-[#6259FF] tracking-tighter text-xs md:text-base">
+                      +$<span className="online price">2</span>/{" "}
                       <span className="mo-yr">mo</span>
                     </span>
+                    ):(<span className="text-[#6259FF] tracking-tighter text-xs md:text-base">
+                      +$<span className="online price">20</span>/{" "}
+                      <span className="mo-yr">yr</span>
+                    </span>)}
                   </div>
                 </label>
 
@@ -425,10 +483,15 @@ const MultiStepForm = () => {
                         Custom theme on your profile
                       </p>
                     </div>
-                    <span className="text-[#6259FF] tracking-tighter text-xs md:text-base">
-                      +$<span className="profile price">2</span>/{" "}
+                    {formData.billingCycle === "monthly" ? (
+                      <span className="text-[#6259FF] tracking-tighter text-xs md:text-base">
+                      +$<span className="online price">2</span>/{" "}
                       <span className="mo-yr">mo</span>
                     </span>
+                    ):(<span className="text-[#6259FF] tracking-tighter text-xs md:text-base">
+                      +$<span className="online price">20</span>/{" "}
+                      <span className="mo-yr">yr</span>
+                    </span>)}
                   </div>
                 </label>
               </div>
@@ -453,13 +516,14 @@ const MultiStepForm = () => {
                       )
                     </h3>
                     <span
-                      className="change-button text-zinc-500 underline cursor-pointer "
+                      className="change-button text-zinc-500 hover:text-blue-800 underline cursor-pointer "
                       onClick={handleGoBack}
                     >
                       Change
                     </span>
                   </div>
-                  <span className="text-[#03295A] font-bold">
+                  {formData.billingCycle === "monthly" ? (
+                    <span className="text-[#03295A] font-bold">
                     $
                     {formData.plan === "Arcade"
                       ? 9
@@ -468,31 +532,52 @@ const MultiStepForm = () => {
                       : 15}
                     /<span className="mo-yr">mo</span>
                   </span>
+                  ):(<span className="text-[#03295A] font-bold">
+                    $
+                    {formData.plan === "Arcade"
+                      ? 90
+                      : formData.plan === "Advanced"
+                      ? 120
+                      : 150}
+                    /<span className="mo-yr">yr</span>
+                  </span>)}
                 </div>
 
                 {/* Add-ons */}
                 {formData.addOns.online && (
                   <div className="summary-add-on flex justify-between">
                     <h3 className="text-zinc-500">Online service</h3>
-                    <span className="text-zinc-500 font-semibold text-sm">
+                    {formData.billingCycle === "monthly" ? (
+                      <span className="text-zinc-500 font-semibold text-sm">
                       +$1/mo
                     </span>
+                    ):(<span className="text-zinc-500 font-semibold text-sm">
+                      +$10/yr
+                    </span>)}
                   </div>
                 )}
                 {formData.addOns.storage && (
                   <div className="summary-add-on flex justify-between">
                     <h3 className="text-zinc-500">Larger storage</h3>
-                    <span className="text-zinc-500 font-semibold text-sm">
+                    {formData.billingCycle === "monthly" ? (
+                      <span className="text-zinc-500 font-semibold text-sm">
                       +$2/mo
                     </span>
+                    ):(<span className="text-zinc-500 font-semibold text-sm">
+                      +$20/yr
+                    </span>)}
                   </div>
                 )}
                 {formData.addOns.profile && (
                   <div className="summary-add-on flex justify-between">
                     <h3 className="text-zinc-500">Customizable profile</h3>
-                    <span className="text-zinc-500 font-semibold text-sm">
+                    {formData.billingCycle === "monthly" ? (
+                      <span className="text-zinc-500 font-semibold text-sm">
                       +$2/mo
                     </span>
+                    ):(<span className="text-zinc-500 font-semibold text-sm">
+                      +$20/yr
+                    </span>)}
                   </div>
                 )}
               </div>
@@ -500,7 +585,7 @@ const MultiStepForm = () => {
               <div className="total flex justify-between p-5">
                 <h3 className="text-zinc-500">
                   Total (per{" "}
-                  <span className="month-year">{formData.billingCycle}</span>)
+                  {formData.billingCycle==="monthly" ?<span className="month-year">month</span>:<span className="month-year">year</span>})
                 </h3>
                 <span className="text-blue-700 font-bold text-xl">
                   ${calculateTotal()}
